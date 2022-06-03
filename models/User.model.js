@@ -5,7 +5,8 @@ const userSchema = new Schema(
   {
     username: {
       type: String,
-      // unique: true -> Ideally, should be unique, but its up to you
+      required: true,
+      unique: true,
     },
     email: {
       type: String,
@@ -16,9 +17,9 @@ const userSchema = new Schema(
       type: String,
       required: true,
     },
+    imageUrl: String,
   },
   {
-    // this second object adds extra properties: `createdAt` and `updatedAt`
     timestamps: true,
   }
 );

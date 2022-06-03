@@ -10,7 +10,7 @@ router.get("/", isAuthenticated, async (req, res, next) => {
     // esto es el req.session.user._id de M2
     // ! solo tienen acceso si la ruta utiliza el middleware isAuthenticated
     try {
-        const response = await PostModel.find();
+        const response = await PostModel.find().sort([['createdAt', -1]]).populate("user");
         res.json(response)
     } catch (error) {
         next(error)
@@ -20,12 +20,13 @@ router.get("/", isAuthenticated, async (req, res, next) => {
 // POST "/api/posts" => create new post
 router.post("/", isAuthenticated, async (req, res, next) => {
 
-    const { user, newMessage } = req.body
+    const { user, newMessage, imageUrl } = req.body
 
     try {
         const insertData = {
             message: newMessage,
-            user: user.id
+            user: user.id,
+            imageUrl
         }
         const response = await PostModel.create(insertData);
         res.json(response)

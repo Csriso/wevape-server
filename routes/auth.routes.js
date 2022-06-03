@@ -6,7 +6,8 @@ const isAuthenticated = require('../middlewares/isAuthenticated')
 
 //POST "/api/auth/signup" User register
 router.post("/signup", async (req, res, next) => {
-    const { email, password, repeatPassword } = req.body;
+    const { email, password, repeatPassword, username } = req.body;
+    console.log(req.body);
     // Checking all inputs
     if (!email || !password || !repeatPassword) {
         res.status(400).json({ errorMessage: "Fill all the inputs." });
@@ -32,8 +33,13 @@ router.post("/signup", async (req, res, next) => {
     try {
         // Check email exists
         const foundUser = await UserModel.findOne({ email })
+        const foundUsername = await UserModel.findOne({ username })
+        if (foundUsername !== null) {
+            res.status(400).json({ errorMessage: "Registered username." });
+            return;
+        }
         if (foundUser !== null) {
-            res.status(400).json({ errorMessage: "Registered user." });
+            res.status(400).json({ errorMessage: "Email in use." });
             return;
         }
 
@@ -43,6 +49,7 @@ router.post("/signup", async (req, res, next) => {
 
         // Create User
         await UserModel.create({
+            username,
             email,
             password: hashPassword,
         })
