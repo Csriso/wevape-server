@@ -19,9 +19,7 @@ router.get("/", isAuthenticated, async (req, res, next) => {
 
 // POST "/api/posts" => create new post
 router.post("/", isAuthenticated, async (req, res, next) => {
-
     const { user, newMessage, imageUrl } = req.body
-
     try {
         const insertData = {
             message: newMessage,
