@@ -3,12 +3,14 @@ const { Schema, model } = require('mongoose')
 const postSchema = new Schema({
     message: String,
     image: String,
-    created: String,
-    modified: String,
+    likeCount: Number,
+    like: [{
+        type: Schema.Types.ObjectId, ref: 'User'
+    }],
     user: {
         type: Schema.Types.ObjectId,
         ref: 'User'
-    }
+    },
 },
     {
         timestamps: true
