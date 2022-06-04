@@ -66,7 +66,12 @@ router.patch("/:id/manageLikes", async (req, res, next) => {
     const { id } = req.params
     const loggedUserId = req.body.id;
     try {
-        await PostModel.findByIdAndUpdate(id, { $push: { likes: loggedUserId }, $inc: { 'likeCount': 1 } })
+        const likedAlready = await PostModel.findOne({ "likes": loggedUserId });
+        if (likedAlready === null) {
+            await PostModel.findByIdAndUpdate(id, { $push: { likes: loggedUserId }, $inc: { 'likeCount': 1 } })
+        } else {
+            await PostModel.findByIdAndUpdate(id, { $pull: { likes: loggedUserId }, $inc: { 'likeCount': -1 } })
+        }
         res.json({ successMessage: "post updated" });
     } catch (error) {
         res.json(error)
