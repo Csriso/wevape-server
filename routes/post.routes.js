@@ -65,9 +65,11 @@ router.patch("/:id/manageLikes", async (req, res, next) => {
 
     const { id } = req.params
     const loggedUserId = req.body.id;
+    console.log("POST ID", id, "USERLOGGEDID", loggedUserId);
     try {
-        const likedAlready = await PostModel.findOne({ "likes": loggedUserId });
-        if (likedAlready === null) {
+        const likedAlready = await PostModel.find({ "_id": id, "likes": loggedUserId });
+        console.log("LIKED ALREADY", likedAlready);
+        if (likedAlready.length === 0) {
             await PostModel.findByIdAndUpdate(id, { $push: { likes: loggedUserId }, $inc: { 'likeCount': 1 } })
         } else {
             await PostModel.findByIdAndUpdate(id, { $pull: { likes: loggedUserId }, $inc: { 'likeCount': -1 } })

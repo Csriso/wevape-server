@@ -5,7 +5,8 @@ const postSchema = new Schema({
     imageUrl: String,
     likeCount: Number,
     likes: [{
-        type: Schema.Types.ObjectId, ref: 'User', unique: true,
+        type: Schema.Types.ObjectId,
+        ref: 'User',
     }],
     user: {
         type: Schema.Types.ObjectId,
