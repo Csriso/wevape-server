@@ -18,6 +18,9 @@ const userSchema = new Schema(
       required: true,
     },
     imageUrl: String,
+    following: [{
+      type: Schema.Types.ObjectId, ref: 'User'
+    }],
   },
   {
     timestamps: true,

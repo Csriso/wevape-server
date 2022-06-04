@@ -4,8 +4,8 @@ const postSchema = new Schema({
     message: String,
     imageUrl: String,
     likeCount: Number,
-    like: [{
-        type: Schema.Types.ObjectId, ref: 'User'
+    likes: [{
+        type: Schema.Types.ObjectId, ref: 'User', unique: true,
     }],
     user: {
         type: Schema.Types.ObjectId,

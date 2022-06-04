@@ -17,6 +17,7 @@ router.get("/", isAuthenticated, async (req, res, next) => {
     }
 })
 
+
 // POST "/api/posts" => create new post
 router.post("/", isAuthenticated, async (req, res, next) => {
     const { user, newMessage, imageUrl } = req.body
@@ -24,7 +25,8 @@ router.post("/", isAuthenticated, async (req, res, next) => {
         const insertData = {
             message: newMessage,
             user: user.id,
-            imageUrl
+            imageUrl,
+            likeCount: 0,
         }
         const response = await PostModel.create(insertData);
         res.json(response)
@@ -34,85 +36,59 @@ router.post("/", isAuthenticated, async (req, res, next) => {
     }
 })
 
-// // GET "/api/todos/:id" => ver los detalles de un to-do
-// router.get("/:id", async (req, res, next) => {
 
-//     const { id } = req.params
+// PATCH "/api/post/:id" - edit post
+router.patch("/:id", async (req, res, next) => {
 
-//     try {
+    const { id } = req.params
+    const { message, imageUrl } = req.body
 
-//         const response = await TodoModel.findById(id)
-//         res.json(response)
+    if (!message === undefined) {
+        res.status(400).json("Fill the inputs");
+        return;
+    }
 
-//     } catch (error) {
-//         next(error)
-//     }
+    try {
+        await PostModel.findByIdAndUpdate(id, {
+            message,
+            imageUrl,
+        })
 
-// })
+        res.json({ successMessage: "post updated" });
+    } catch (error) {
+        next(error)
+    }
+})
 
-// // DELETE "/api/todos/:id" => borrar un to-do
-// router.delete("/:id", async (req, res, next) => {
+// PATCH "/api/post/:id/addLike" - edit post
+router.patch("/:id/manageLikes", async (req, res, next) => {
 
-//     const { id } = req.params
+    const { id } = req.params
+    const loggedUserId = req.body.id;
+    try {
+        await PostModel.findByIdAndUpdate(id, { $push: { likes: loggedUserId }, $inc: { 'likeCount': 1 } })
+        res.json({ successMessage: "post updated" });
+    } catch (error) {
+        res.json(error)
+        next(error)
+    }
+})
 
-//     try {
+// DELETE "/api/post/:id" - delete post
+router.delete("/:id", async (req, res, next) => {
+    const { id } = req.params
 
-//         // buscar un todo y borrarlo de la BD
-//         await TodoModel.findByIdAndDelete(id)
-//         res.json("to-do ha sido borrado") // no importa lo que enviemos, siempre hay que dar una respuesta
+    try {
+        await PostModel.findByIdAndDelete(id);
+        res.json({ successMessage: "Post deleted." });
+        return;
+    } catch (error) {
+        next(error)
+    }
 
-//     } catch (error) {
-//         next(error)
-//     }
+})
 
-// })
 
-// // PATCH "/api/todos/:id" => editar un To-Do
-// router.patch("/:id", async (req, res, next) => {
-
-//     const { id } = req.params
-//     const { title, description, isUrgent } = req.body
-
-//     if (!title || !description || isUrgent === undefined) {
-//         res.status(400).json("todos los campos deben estar llenos")
-//     }
-
-//     // const todoObj = { }
-
-//     // if (title) {
-//     //   todoObj.title = title
-//     // }
-
-//     // if (description) {
-//     //   todoObj.description = description
-//     // }
-
-//     // if (isUrgent) {
-//     //   todoObj.isUrgent = isUrgent
-//     // }
-
-//     try {
-
-//         await TodoModel.findByIdAndUpdate(id, {
-//             title,
-//             description,
-//             isUrgent
-//         })
-//         res.json("to-do actualizado")
-
-//         // // esto es si el frontend requiere el elemento actualizado justo luego de hacer el edit
-//         // const response = await TodoModel.findByIdAndUpdate(id, {
-//         //   title,
-//         //   description,
-//         //   isUrgent
-//         // }, {new: true})
-//         // res.json(response)
-
-//     } catch (error) {
-//         next(error)
-//     }
-
-// })
 
 
 
