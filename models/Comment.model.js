@@ -7,10 +7,16 @@ const commentSchema = new Schema({
         type: Schema.Types.ObjectId,
         ref: 'User'
     },
+    commentCount: Number,
     comments: [{
         type: Schema.Types.ObjectId,
-        ref: 'Comment'
-    }]
+        ref: 'Comment',
+    }],
+    likeCount: Number,
+    likes: [{
+        type: Schema.Types.ObjectId,
+        ref: 'User',
+    }],
 
 },
     {

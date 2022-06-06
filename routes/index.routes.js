@@ -16,6 +16,9 @@ router.use("/post", postRoutes)
 const userRoutes = require('./user.routes')
 router.use("/user", userRoutes)
 
+const commentRoutes = require('./comment.routes')
+router.use("/comment", commentRoutes)
+
 //Image uploader
 // POST "/api/upload" => Route that receives the image, sends it to Cloudinary via the fileUploader and returns the image URL
 router.post("/upload", fileUploader.single("imageUrl"), (req, res, next) => {
