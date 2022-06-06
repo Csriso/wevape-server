@@ -3,9 +3,10 @@ const PostModel = require('../models/Post.model')
 const UserModel = require('../models/User.model')
 const isAuthenticated = require('../middlewares/isAuthenticated')
 
-// GET "/api/posts/" => get all posts
+// GET "/api/post/" => get all posts
 router.get("/", isAuthenticated, async (req, res, next) => {
     console.log(req.payload._id)
+
     // con esto tienen acceso al usuario logeado
     // esto es el req.session.user._id de M2
     // ! solo tienen acceso si la ruta utiliza el middleware isAuthenticated
@@ -17,8 +18,22 @@ router.get("/", isAuthenticated, async (req, res, next) => {
     }
 })
 
+// GET "/api/post/:id" => get single post
+router.get("/:id", isAuthenticated, async (req, res, next) => {
+    const { id } = req.params;
+    try {
+        const response = await PostModel.findById(id).populate("user");
+        console.log(response);
+        res.json(response)
+    } catch (error) {
+        res.json(error);
+        next(error)
+    }
+})
 
-// POST "/api/posts" => create new post
+
+
+// POST "/api/post" => create new post
 router.post("/", isAuthenticated, async (req, res, next) => {
     const { user, newMessage, imageUrl } = req.body
     try {

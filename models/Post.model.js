@@ -12,6 +12,11 @@ const postSchema = new Schema({
         type: Schema.Types.ObjectId,
         ref: 'User'
     },
+    commentCount: Number,
+    comments: [{
+        type: Schema.Types.ObjectId,
+        ref: 'Comment',
+    }]
 },
     {
         timestamps: true
