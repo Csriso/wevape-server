@@ -10,17 +10,17 @@ router.get("/:username", isAuthenticated, async (req, res, next) => {
         res.json({ errorMessage: "Username undefined" });
         return;
     }
-
+    console.log("Username", username)
     try {
         const response = await UserModel.find({ username: username });
+        console.log(response);
         if (response.length === 0) {
             res.json({ errorMessage: "User not found." });
             return;
         }
-        res.json(response);
+        res.json(response[0]);
     } catch (error) {
         next(error)
-
     }
 })
 

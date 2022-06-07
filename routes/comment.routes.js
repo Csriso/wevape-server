@@ -4,8 +4,17 @@ const PostModel = require('../models/Post.model')
 
 
 // GET ONE COMMENT
-router.get("/:id", (req, res, next) => {
-
+router.get("/:id", async (req, res, next) => {
+    const { id } = req.params;
+    console.log(id);
+    try {
+        //{ path: 'fans', select: 'name' }
+        const response = await CommentModel.findById(id).populate("user").populate("comments");
+        console.log(response);
+        res.json(response);
+    } catch (error) {
+        console.log(error);
+    }
 })
 
 // CREATE NEW COMMENT 

@@ -80,7 +80,8 @@ router.post("/login", async (req, res, next) => {
         // Creation of token JWT
         const payload = {
             id: foundUser._id,
-            email: foundUser.email
+            email: foundUser.email,
+            username: foundUser.username,
         }
         const authToken = jwt.sign(
             payload,
@@ -99,6 +100,7 @@ router.post("/login", async (req, res, next) => {
 
 router.get("/verify", isAuthenticated, (req, res, next) => {
     // Verify the token each request
+    console.log(req.payload);
     res.json(req.payload)
 })
 module.exports = router;

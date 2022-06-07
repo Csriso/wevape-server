@@ -11,7 +11,7 @@ router.get("/", isAuthenticated, async (req, res, next) => {
     // esto es el req.session.user._id de M2
     // ! solo tienen acceso si la ruta utiliza el middleware isAuthenticated
     try {
-        const response = await PostModel.find().sort([['createdAt', -1]]).populate("user");
+        const response = await PostModel.find().sort([['createdAt', -1]]).populate("user").populate("comments");
         res.json(response)
     } catch (error) {
         next(error)
@@ -22,7 +22,7 @@ router.get("/", isAuthenticated, async (req, res, next) => {
 router.get("/:id", isAuthenticated, async (req, res, next) => {
     const { id } = req.params;
     try {
-        const response = await PostModel.findById(id).populate("user");
+        const response = await PostModel.findById(id).populate({ path: 'user', select: 'username' }).populate("comments");
         console.log(response);
         res.json(response)
     } catch (error) {

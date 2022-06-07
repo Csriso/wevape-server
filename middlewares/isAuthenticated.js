@@ -5,7 +5,6 @@ const isAuthenticated = expressjwt({
     algorithms: ["HS256"],
     requestProperty: "payload",
     getToken: (req) => {
-
         // Check if token exists in req headers.
         if (req.headers === undefined || req.headers.authorization === undefined) {
             console.log("no hay token")
@@ -25,7 +24,6 @@ const isAuthenticated = expressjwt({
 
         console.log("El token fue entregado")
         return token
-
     }
 })
 
