@@ -10,10 +10,8 @@ router.get("/:username", isAuthenticated, async (req, res, next) => {
         res.json({ errorMessage: "Username undefined" });
         return;
     }
-    console.log("Username", username)
     try {
         const response = await UserModel.find({ username: username });
-        console.log(response);
         if (response.length === 0) {
             res.json({ errorMessage: "User not found." });
             return;
@@ -38,6 +36,35 @@ router.patch("/:username", isAuthenticated, async (req, res, next) => {
         if (response.length === 0 || response === null) {
             res.json({ errorMessage: "We cant update user." });
             return;
+        }
+        res.json({ sucessMessage: "User updated" });
+    } catch (error) {
+        if (error.codeName === "DuplicateKey") {
+            res.json({ errorMessage: "We cant update user, username already in use." });
+            return;
+        }
+        next(error)
+    }
+})
+
+//PATCH "/api/user/:username/follow" => edit user
+router.patch("/:username/follow", isAuthenticated, async (req, res, next) => {
+    const { username } = req.params;
+    const userFollowingReq = req.body;
+    if (username === undefined) {
+        res.json({ errorMessage: "Username undefined" });
+        return;
+    }
+    try {
+        const userFollowing = await UserModel.findOne({ username: userFollowingReq.username });
+        const userFollowed = await UserModel.findOne({ username: username });
+
+        if (!userFollowing.following.includes(userFollowed._id)) {
+            //FOLLOW
+            await UserModel.findByIdAndUpdate(userFollowing._id, { $push: { following: userFollowed._id } })
+        } else {
+            //UNFOLLOW
+            await UserModel.findByIdAndUpdate(userFollowing._id, { $pull: { following: userFollowed._id } })
         }
         res.json({ sucessMessage: "User updated" });
     } catch (error) {

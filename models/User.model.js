@@ -21,6 +21,8 @@ const userSchema = new Schema(
     following: [{
       type: Schema.Types.ObjectId, ref: 'User'
     }],
+    description: String,
+    location: String,
   },
   {
     timestamps: true,

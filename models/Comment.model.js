@@ -2,7 +2,7 @@ const { Schema, model } = require('mongoose')
 
 const commentSchema = new Schema({
     message: String,
-    image: String,
+    imageUrl: String,
     user: {
         type: Schema.Types.ObjectId,
         ref: 'User'

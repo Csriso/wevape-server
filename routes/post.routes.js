@@ -5,7 +5,6 @@ const isAuthenticated = require('../middlewares/isAuthenticated')
 
 // GET "/api/post/" => get all posts
 router.get("/", isAuthenticated, async (req, res, next) => {
-    console.log(req.payload._id)
 
     // con esto tienen acceso al usuario logeado
     // esto es el req.session.user._id de M2
@@ -23,7 +22,6 @@ router.get("/:id", isAuthenticated, async (req, res, next) => {
     const { id } = req.params;
     try {
         const response = await PostModel.findById(id).populate({ path: 'user', select: 'username' }).populate("comments");
-        console.log(response);
         res.json(response)
     } catch (error) {
         res.json(error);
@@ -31,7 +29,18 @@ router.get("/:id", isAuthenticated, async (req, res, next) => {
     }
 })
 
-
+// GET "/api/post/:username/user" => get single post
+router.get("/:username/user", isAuthenticated, async (req, res, next) => {
+    const { username } = req.params;
+    try {
+        const user = await UserModel.findOne({ username });
+        const response = await PostModel.find({ user: user._id }).populate({ path: 'user', select: 'username' }).populate("comments");
+        res.json(response)
+    } catch (error) {
+        res.json(error);
+        next(error)
+    }
+})
 
 // POST "/api/post" => create new post
 router.post("/", isAuthenticated, async (req, res, next) => {
@@ -80,10 +89,8 @@ router.patch("/:id/manageLikes", async (req, res, next) => {
 
     const { id } = req.params
     const loggedUserId = req.body.id;
-    console.log("POST ID", id, "USERLOGGEDID", loggedUserId);
     try {
         const likedAlready = await PostModel.find({ "_id": id, "likes": loggedUserId });
-        console.log("LIKED ALREADY", likedAlready);
         if (likedAlready.length === 0) {
             await PostModel.findByIdAndUpdate(id, { $push: { likes: loggedUserId }, $inc: { 'likeCount': 1 } })
         } else {
