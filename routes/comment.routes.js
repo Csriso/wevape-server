@@ -1,7 +1,8 @@
 const router = require("express").Router();
 const CommentModel = require('../models/Comment.model')
 const PostModel = require('../models/Post.model')
-const isAuthenticated = require('../middlewares/isAuthenticated')
+const isAuthenticated = require('../middlewares/isAuthenticated');
+const AdModel = require("../models/Ad.model");
 
 
 // GET ONE COMMENT
@@ -36,7 +37,7 @@ router.post("/of/comment/:id/", isAuthenticated, async (req, res, next) => {
         res.json(error);
     }
 })
-// CREATE NEW COMMENT 
+// CREATE NEW COMMENT OF POST
 // POST "/api/comment/:idPost"
 router.post("/:idPost", isAuthenticated, async (req, res, next) => {
     const { idPost } = req.params;
@@ -51,6 +52,27 @@ router.post("/:idPost", isAuthenticated, async (req, res, next) => {
         }
         const responseComment = await CommentModel.create(insertData);
         const insertCommentOnPost = await PostModel.findByIdAndUpdate(idPost, { $push: { comments: responseComment._id }, $inc: { 'commentCount': 1 } })
+        res.json("comment added");
+    } catch (error) {
+        res.json(error);
+    }
+})
+
+// CREATE NEW COMMENT OF POST
+// POST "/api/comment/:idAd"
+router.post("/:idAd/ad", isAuthenticated, async (req, res, next) => {
+    const { idAd } = req.params;
+    const { user, newMessage, imageUrl } = req.body;
+    try {
+        const insertData = {
+            message: newMessage,
+            user: user,
+            imageUrl,
+            likeCount: 0,
+            commentCount: 0,
+        }
+        const responseComment = await CommentModel.create(insertData);
+        const insertCommentOnAd = await AdModel.findByIdAndUpdate(idAd, { $push: { comments: responseComment._id }, $inc: { 'commentCount': 1 } })
         res.json("comment added");
     } catch (error) {
         res.json(error);

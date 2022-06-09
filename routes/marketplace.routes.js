@@ -28,10 +28,11 @@ router.get("/:id", isAuthenticated, async (req, res, next) => {
 
 // POST "/api/ad" => create new ad
 router.post("/", isAuthenticated, async (req, res, next) => {
-    const { user, newMessage, imageUrl, price } = req.body
+    const { user, product, imageUrl, price, message } = req.body
     try {
         const insertData = {
-            message: newMessage,
+            product,
+            message,
             user: user.id,
             imageUrl,
             likeCount: 0,

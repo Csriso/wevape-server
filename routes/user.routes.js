@@ -119,7 +119,6 @@ router.delete("/:username", isAuthenticated, async (req, res, next) => {
 router.patch("/:userid/image", isAuthenticated, async (req, res, next) => {
     const { userid } = req.params;
     const { imageUrl } = req.body;
-    console.log("IMAGEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEE");
     if (userid === undefined) {
         res.json({ errorMessage: "userid undefined" });
         return;
