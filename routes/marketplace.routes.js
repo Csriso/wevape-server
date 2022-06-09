@@ -14,7 +14,7 @@ router.get("/", isAuthenticated, async (req, res, next) => {
     }
 })
 
-// GET "/api/ad/:id" => get single post
+// GET "/api/ad/:id" => get single ad
 router.get("/:id", isAuthenticated, async (req, res, next) => {
     const { id } = req.params;
     try {
@@ -26,15 +26,16 @@ router.get("/:id", isAuthenticated, async (req, res, next) => {
     }
 })
 
-// POST "/api/ad" => create new post
+// POST "/api/ad" => create new ad
 router.post("/", isAuthenticated, async (req, res, next) => {
-    const { user, newMessage, imageUrl } = req.body
+    const { user, newMessage, imageUrl, price } = req.body
     try {
         const insertData = {
             message: newMessage,
             user: user.id,
             imageUrl,
             likeCount: 0,
+            price
         }
         const response = await AdModel.create(insertData);
         res.json(response)
