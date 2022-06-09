@@ -1,10 +1,11 @@
 const router = require("express").Router();
 const CommentModel = require('../models/Comment.model')
 const PostModel = require('../models/Post.model')
+const isAuthenticated = require('../middlewares/isAuthenticated')
 
 
 // GET ONE COMMENT
-router.get("/:id", async (req, res, next) => {
+router.get("/:id", isAuthenticated, async (req, res, next) => {
     const { id } = req.params;
     try {
         //{ path: 'fans', select: 'name' }
@@ -17,7 +18,7 @@ router.get("/:id", async (req, res, next) => {
 
 // CREATE NEW COMMENT 
 // POST "/api/comment/:id/comment"
-router.post("/of/comment/:id/", async (req, res, next) => {
+router.post("/of/comment/:id/", isAuthenticated, async (req, res, next) => {
     const { id } = req.params;
     const { user, newMessage, imageUrl } = req.body;
     try {
@@ -37,7 +38,7 @@ router.post("/of/comment/:id/", async (req, res, next) => {
 })
 // CREATE NEW COMMENT 
 // POST "/api/comment/:idPost"
-router.post("/:idPost", async (req, res, next) => {
+router.post("/:idPost", isAuthenticated, async (req, res, next) => {
     const { idPost } = req.params;
     const { user, newMessage, imageUrl } = req.body;
     try {
@@ -58,7 +59,7 @@ router.post("/:idPost", async (req, res, next) => {
 
 
 // PATCH "/api/post/:id/addLike" - manage likes dislike post
-router.patch("/:id/manageLikes", async (req, res, next) => {
+router.patch("/:id/manageLikes", isAuthenticated, async (req, res, next) => {
 
     const { id } = req.params
     const loggedUserId = req.body.id;
@@ -73,6 +74,27 @@ router.patch("/:id/manageLikes", async (req, res, next) => {
     } catch (error) {
         res.json(error)
     }
+})
+
+
+// DELETE "/api/comment/:id" - delete post
+router.delete("/:id", isAuthenticated, async (req, res, next) => {
+    const { id } = req.params
+    try {
+        const findComment = await CommentModel.findById(id);
+        if (String(findComment.user._id) === req.payload.id) {
+            await CommentModel.findByIdAndDelete(id);
+            console.log("DELETED");
+            res.json({ successMessage: "Comment deleted." });
+        } else {
+            console.log("sdaadsa");
+            res.json({ successMessage: "Not your comment." });
+        }
+    } catch (error) {
+        res.json(error);
+        next(error)
+    }
+
 })
 
 module.exports = router

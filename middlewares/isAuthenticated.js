@@ -11,7 +11,7 @@ const isAuthenticated = expressjwt({
             return null;
         }
 
-        console.log(req.headers.authorization)
+        // console.log(req.headers.authorization)
         const tokenArr = req.headers.authorization.split(" ")
         const tokenType = tokenArr[0]
         const token = tokenArr[1]

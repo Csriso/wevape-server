@@ -59,6 +59,7 @@ router.post("/signup", async (req, res, next) => {
     }
 })
 
+
 //POST "/api/auth/login" User login
 router.post("/login", async (req, res, next) => {
     const { email, password } = req.body;
@@ -80,7 +81,6 @@ router.post("/login", async (req, res, next) => {
         const payload = {
             id: foundUser._id,
             email: foundUser.email,
-            username: foundUser.username,
         }
         const authToken = jwt.sign(
             payload,
