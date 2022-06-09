@@ -1,8 +1,16 @@
 const { Schema, model } = require('mongoose')
 
-const commentSchema = new Schema({
+const adSchema = new Schema({
     message: String,
     imageUrl: String,
+    sold: Boolean,
+    reserved: Boolean,
+    likeCount: Number,
+    price: Number,
+    likes: [{
+        type: Schema.Types.ObjectId,
+        ref: 'User',
+    }],
     user: {
         type: Schema.Types.ObjectId,
         ref: 'User'
@@ -11,23 +19,13 @@ const commentSchema = new Schema({
     comments: [{
         type: Schema.Types.ObjectId,
         ref: 'Comment',
-    }],
-    likeCount: Number,
-    likes: [{
-        type: Schema.Types.ObjectId,
-        ref: 'User',
-    }],
-    deleted: {
-        type: Boolean,
-        default: false,
-    }
-
+    }]
 },
     {
         timestamps: true
     }
 );
 
-const CommentModel = model("Comment", commentSchema);
+const AdModel = model("Ad", adSchema);
 
-module.exports = CommentModel
+module.exports = AdModel
