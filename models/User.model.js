@@ -23,6 +23,9 @@ const userSchema = new Schema(
     }],
     description: String,
     location: String,
+    groups: [{
+      type: Schema.Types.ObjectId, ref: 'Group'
+    }]
   },
   {
     timestamps: true,

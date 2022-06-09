@@ -5,10 +5,6 @@ const isAuthenticated = require('../middlewares/isAuthenticated')
 
 // GET "/api/post/" => get all posts
 router.get("/", isAuthenticated, async (req, res, next) => {
-
-    // con esto tienen acceso al usuario logeado
-    // esto es el req.session.user._id de M2
-    // ! solo tienen acceso si la ruta utiliza el middleware isAuthenticated
     try {
         const response = await PostModel.find().sort([['createdAt', -1]]).populate({ path: 'user', select: 'username imageUrl' }).populate("comments");
         res.json(response)
