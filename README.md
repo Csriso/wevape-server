@@ -25,6 +25,13 @@ Social network for vape users around the world.
 
 ## Proyect layout
 
+- "/config" -> Express config
+- "/db" -> Db config
+- "/error-handling" -> Express error config
+- "/middlewares" -> Auth JWT and image uploader middleware
+- "/models" -> Models of Mongo DB database
+- "/routes" -> API Routes
+
 ## API Reference
 
 ### Auth Routes
