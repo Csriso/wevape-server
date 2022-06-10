@@ -1,4 +1,6 @@
-![Logo](https://github.com/Csriso/wevape-client/blob/main/public/logo.png?raw=true)
+<p align="center">
+  <img src="https://github.com/Csriso/wevape-client/blob/main/public/logo.png?raw=true" />
+</p>
 
 # WeVape Back-End
 
