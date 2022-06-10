@@ -11,11 +11,8 @@ router.get("/:username", isAuthenticated, async (req, res, next) => {
         return;
     }
     try {
-        console.log(`ENTROOOOOoooooooooOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOO`);
-        console.log(username);
         const response = await UserModel.find({ username: username });
 
-        console.log(response);
         if (response.length === 0) {
             res.json({ errorMessage: "User not found." });
             return;
@@ -79,10 +76,8 @@ router.patch("/:username/follow", isAuthenticated, async (req, res, next) => {
         return;
     }
     try {
-        console.log(username, userFollowingReq);
         const userFollowing = await UserModel.findById(userFollowingReq.id);
         const userFollowed = await UserModel.findOne({ username: username });
-        console.log(userFollowing, userFollowed);
         if (!userFollowing.following.includes(userFollowed._id)) {
             //FOLLOW
             await UserModel.findByIdAndUpdate(userFollowing._id, { $push: { following: userFollowed._id } })
@@ -123,13 +118,10 @@ router.patch("/:userid/image", isAuthenticated, async (req, res, next) => {
         res.json({ errorMessage: "userid undefined" });
         return;
     }
-    console.log(userid, imageUrl);
     try {
         const response = await UserModel.findByIdAndUpdate(userid, { imageUrl: imageUrl });
-        console.log(response);
         res.json({ sucessMessage: "User updated" });
     } catch (error) {
-        console.log(error);
         res.json({ errorMessage: error });
         return;
     }

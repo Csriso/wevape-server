@@ -33,7 +33,6 @@ router.get("/:id/myfeed", isAuthenticated, async (req, res, next) => {
         user.following.push(id);
         if (user.following.length !== 0) {
             const response = await PostModel.find().where('user').in(user.following).sort([['createdAt', -1]]).populate({ path: 'user', select: 'username imageUrl' }).populate("comments");
-            console.log(response);
             res.json(response);
             return;
         } else {

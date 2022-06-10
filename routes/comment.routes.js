@@ -106,10 +106,8 @@ router.delete("/:id", isAuthenticated, async (req, res, next) => {
         const findComment = await CommentModel.findById(id);
         if (String(findComment.user._id) === req.payload.id) {
             await CommentModel.findByIdAndUpdate(id, { message: "Deleted comment", deleted: true });
-            console.log("DELETED");
             res.json({ successMessage: "Comment deleted." });
         } else {
-            console.log("sdaadsa");
             res.json({ successMessage: "Not your comment." });
         }
     } catch (error) {

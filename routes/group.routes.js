@@ -18,7 +18,6 @@ router.get("/my", isAuthenticated, async (req, res, next) => {
     const { id } = req.body;
     try {
         const response = await UserModel.findById(req.payload.id).populate("groups");
-        console.log(response);
         res.json(response)
     } catch (error) {
         next(error)
@@ -42,7 +41,6 @@ router.get("/:id", isAuthenticated, async (req, res, next) => {
 router.post("/", isAuthenticated, async (req, res, next) => {
     const { name, description, imageUrl } = req.body
     try {
-        console.log(req.payload);
         const insertData = {
             name,
             description,

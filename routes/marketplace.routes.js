@@ -5,7 +5,6 @@ const isAuthenticated = require('../middlewares/isAuthenticated')
 
 // GET "/api/ad/" => get all ads
 router.get("/", isAuthenticated, async (req, res, next) => {
-    console.log("ENTRO");
     try {
         const response = await AdModel.find().sort([['createdAt', -1]]).populate({ path: 'user', select: 'username imageUrl' }).populate("comments");
         res.json(response)
