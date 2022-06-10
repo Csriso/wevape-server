@@ -13,8 +13,9 @@ Social network for vape users around the world.
 ## MVP
 
 - Social Stories of different users about vaping (CRUD) ✔️
-- Users, add users to follow or friend… ✔️
-- People can comment, other people stories and like it. ✔️
+- Users, add users to follow ✔️
+- Users can comment other people stories ✔️
+- Users can like people stories ✔️
 
 ## Backlog
 
